@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Exam — Dashboard</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dashboard-page">
+
+    <!-- ── Loading Screen (shown while verifying session) ── -->
+    <div class="loading-screen" id="loading-screen">
+        <div class="spinner"></div>
+        <p>Verifying your session...</p>
+    </div>
+
+    <!-- ── Warning Modal (shown on page load) ─────────────── -->
+    <div class="modal-overlay hidden" id="warning-modal">
+        <div class="modal-box">
+            <div class="modal-icon">⚠️</div>
+            <div class="modal-title">Exam Rules</div>
+            <div class="modal-message">
+                You have <strong>10 minutes</strong> to complete this exam.<br><br>
+                ⚠️ <strong>Do NOT switch tabs</strong>, minimize the window, or open another app.<br><br>
+                Any such action will <strong>automatically submit</strong> your exam immediately.<br><br>
+                Right-click, copy, and paste are <strong>disabled</strong> during the exam.
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="startExam()">I Understand — Start Exam</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Tab-Switch Warning Modal ───────────────────────── -->
+    <div class="modal-overlay hidden" id="violation-modal">
+        <div class="modal-box">
+            <div class="modal-icon">🚨</div>
+            <div class="modal-title">Rule Violation Detected!</div>
+            <div class="modal-message" id="violation-msg">
+                You switched tabs or minimized the window. Your exam has been submitted automatically.
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-danger" onclick="closeViolationModal()">View Result</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Confirm Submit Modal ────────────────────────────── -->
+    <div class="modal-overlay hidden" id="confirm-modal">
+        <div class="modal-box">
+            <div class="modal-icon">📝</div>
+            <div class="modal-title">Submit Exam?</div>
+            <div class="modal-message" id="confirm-msg">
+                Are you sure you want to submit? You cannot go back.
+            </div>
+            <div class="modal-actions">
+                <button class="btn-outline" onclick="closeConfirmModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="submitExam(false)">Submit Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EXAM HEADER
+    ══════════════════════════════════════════════════════════ -->
+    <header class="exam-header hidden" id="exam-header">
+        <div class="header-brand">
+            <div class="icon">🔐</div>
+            <span>Secure Exam</span>
+        </div>
+        <div class="header-meta">
+            <div class="user-tag">Welcome, <strong id="user-name">Student</strong></div>
+            <div class="timer-box" id="timer-box">
+                ⏱ <span id="timer-display">10:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════
+         EXAM CONTENT (Questions)
+    ══════════════════════════════════════════════════════════ -->
+    <main class="exam-container hidden" id="exam-section">
+
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <div class="progress-info">
+                <span id="progress-label">Question 1 of 10</span>
+                <span id="progress-percent">0% answered</span>
+            </div>
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="question-card">
+            <div class="question-number" id="q-number">QUESTION 1 / 10</div>
+            <div class="question-text" id="q-text">Loading question...</div>
+            <div class="options-grid" id="q-options">
+                <!-- Options rendered by JS -->
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <button class="btn-outline" id="btn-prev" onclick="changeQuestion(-1)">← Previous</button>
+            <div style="font-family:var(--mono); font-size:0.8rem; color:var(--text-secondary);" id="answered-count">
+                0 / 10 answered
+            </div>
+            <button class="btn btn-primary" id="btn-next" onclick="changeQuestion(1)">Next →</button>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+            <button class="btn btn-danger" id="btn-submit" onclick="confirmSubmit()" style="max-width:320px; margin:0 auto;">
+                🏁 Submit Exam
+            </button>
+            <p class="submit-note">Make sure you've answered all questions before submitting.</p>
+        </div>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════════════════
+         RESULT SCREEN (shown after submit)
+    ══════════════════════════════════════════════════════════ -->
+    <main class="exam-container hidden" id="result-section">
+        <div class="result-screen">
+            <div class="result-badge" id="result-badge">🏆</div>
+            <div class="result-title" id="result-title">Exam Complete!</div>
+            <div class="result-subtitle" id="result-subtitle">Here's how you did</div>
+
+            <div class="result-stats">
+                <div class="stat-box">
+                    <div class="stat-value accent" id="res-score">0</div>
+                    <div class="stat-label">Correct Answers</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" style="color:var(--text-secondary)" id="res-total">10</div>
+                    <div class="stat-label">Total Questions</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value success" id="res-percent">0%</div>
+                    <div class="stat-label">Percentage</div>
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <button class="btn btn-primary" onclick="window.location.href='index.html'">
+                    🔄 Logout
+                </button>
+            </div>
+
+            <p style="margin-top:24px; font-size:0.82rem; color:var(--text-secondary);">
+                Your result has been saved. Thank you for taking the exam!
+            </p>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

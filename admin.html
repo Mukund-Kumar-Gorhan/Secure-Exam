@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Admin Panel - Secure Exam</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+
+<h1 style="text-align:center; margin:20px;">⚙️ Admin Panel</h1>
+
+<div class="exam-container">
+
+```
+<h2>👤 Users</h2>
+<table border="1" width="100%" id="users-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<h2 style="margin-top:40px;">📊 Results</h2>
+<table border="1" width="100%" id="results-table">
+    <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Score</th>
+            <th>Total</th>
+            <th>%</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+```
+
+</div>
+
+<script>
+async function loadData() {
+    const usersRes = await fetch('/admin/users');
+    const users = await usersRes.json();
+
+    const resultsRes = await fetch('/admin/results');
+    const results = await resultsRes.json();
+
+    // Users table
+    let uhtml = '';
+    users.forEach(u => {
+        uhtml += `<tr>
+            <td>${u.id}</td>
+            <td>${u.name}</td>
+            <td>${u.email}</td>
+        </tr>`;
+    });
+    document.querySelector('#users-table tbody').innerHTML = uhtml;
+
+    // Results table
+    let rhtml = '';
+    results.forEach(r => {
+        rhtml += `<tr>
+            <td>${r.user_id}</td>
+            <td>${r.score}</td>
+            <td>${r.total}</td>
+            <td>${r.percentage}%</td>
+        </tr>`;
+    });
+    document.querySelector('#results-table tbody').innerHTML = rhtml;
+}
+
+loadData();
+</script>
+
+</body>
+</html>

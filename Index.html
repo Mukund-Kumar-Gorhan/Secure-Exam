@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Exam — Login</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="description" content="Secure online examination portal" />
+</head>
+<body class="auth-page">
+
+    <!-- ── Brand Logo ──────────────────────────────────────── -->
+    <div class="brand">
+        <div class="brand-icon">🔐</div>
+        <div>
+            <h1>Secure Exam</h1>
+            <p>ONLINE EXAMINATION PORTAL</p>
+        </div>
+    </div>
+
+    <!-- ── Auth Card ───────────────────────────────────────── -->
+    <div class="auth-card">
+
+        <!-- Tab Switcher: Login / Signup -->
+        <div class="tab-switcher">
+            <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Login</button>
+            <button class="tab-btn" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- ── LOGIN FORM ─────────────────────────────────── -->
+        <div class="form-panel" id="login-panel">
+            <div id="login-alert"></div>
+
+            <div class="form-group">
+                <label for="login-email">Email Address</label>
+                <input
+                    type="email"
+                    id="login-email"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input
+                    type="password"
+                    id="login-password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                />
+            </div>
+
+            <button class="btn btn-primary" id="login-btn" onclick="handleLogin()">
+                <span>Login to Exam Portal</span>
+                <span>→</span>
+            </button>
+
+            <p class="text-center mt-2" style="font-size:0.85rem; color:var(--text-secondary)">
+                Don't have an account?
+                <a href="#" onclick="switchTab('signup')">Create one</a>
+            </p>
+        </div>
+
+        <!-- ── SIGNUP FORM ────────────────────────────────── -->
+        <div class="form-panel hidden" id="signup-panel">
+            <div id="signup-alert"></div>
+
+            <div class="form-group">
+                <label for="signup-name">Full Name</label>
+                <input
+                    type="text"
+                    id="signup-name"
+                    placeholder="John Doe"
+                    autocomplete="name"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="signup-email">Email Address</label>
+                <input
+                    type="email"
+                    id="signup-email"
+                    placeholder="you@example.com"
+                    autocomplete="email"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="signup-password">Password</label>
+                <input
+                    type="password"
+                    id="signup-password"
+                    placeholder="Minimum 6 characters"
+                    autocomplete="new-password"
+                    required
+                />
+            </div>
+
+            <button class="btn btn-primary" id="signup-btn" onclick="handleSignup()">
+                <span>Create Account</span>
+                <span>→</span>
+            </button>
+
+            <p class="text-center mt-2" style="font-size:0.85rem; color:var(--text-secondary)">
+                Already registered?
+                <a href="#" onclick="switchTab('login')">Login here</a>
+            </p>
+        </div>
+
+    </div><!-- /auth-card -->
+
+    <!-- ── Footer note ────────────────────────────────────── -->
+    <p style="margin-top:24px; font-size:0.78rem; color:var(--text-secondary); text-align:center;">
+        🔒 All exam sessions are monitored &amp; secured
+    </p>
+
+    <script src="script.js"></script>
+</body>
+</html>
